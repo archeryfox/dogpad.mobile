@@ -1,0 +1,42 @@
+{
+  "name": "dogpad",
+  "version": "1.0.0",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-community/datetimepicker": "7.6.1",
+    "@react-navigation/bottom-tabs": "^6.5.11",
+    "@types/react": "~18.2.45",
+    "axios": "^1.8.4",
+    "date-fns": "^4.1.0",
+    "expo": "~50.0.5",
+    "expo-barcode-scanner": "^13.0.1",
+    "expo-camera": "^16.0.18",
+    "expo-constants": "~15.4.5",
+    "expo-image-picker": "~14.7.1",
+    "expo-linking": "~6.2.2",
+    "expo-router": "~3.4.6",
+    "expo-status-bar": "~1.11.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.73.2",
+    "react-native-markdown-display": "^7.0.2",
+    "react-native-safe-area-context": "4.8.2",
+    "react-native-screens": "~3.29.0",
+    "react-native-svg": "^15.11.2",
+    "react-native-web": "~0.19.6",
+    "react-qr-code": "^2.0.12",
+    "typescript": "^5.3.0",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0"
+  },
+  "private": true
+}
