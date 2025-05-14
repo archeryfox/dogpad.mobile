@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/events/subscriptions.jsx
 import React, { useEffect } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import EventList from '../../../components/EventList';

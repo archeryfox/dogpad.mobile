@@ -1,3 +1,4 @@
+// dogpad.mobile/stores/EventStore.js
 import { create } from 'zustand';
 import api, { routes } from "./axios.js";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,7 +12,7 @@ const useEventStore = create((set, get) => ({
     searchTerm: '',
     selectedCategory: null,
     dateFilter: null, // 'upcoming', 'past', 'today', 'this-week', 'this-month' или null для всех
-    sortOption: 'date', // 'date' или 'name'
+    sortOption: 'date', // 'date' или 'name' или 'price'
 
     setEvents: (events) => {
         set({ events });
@@ -66,11 +67,18 @@ const useEventStore = create((set, get) => ({
             );
         }
         
-        // Фильтрация по категории
+        // Фильтрация по категории - исправленная версия
         if (selectedCategory) {
             filtered = filtered.filter(event => {
-                if (!event.categories) return false;
-                return event.categories.some(cat => cat.id === selectedCategory);
+                // Проверяем наличие категорий у события
+                if (!event.categories || !Array.isArray(event.categories)) return false;
+                
+                // Проверяем совпадение ID категории
+                return event.categories.some(cat => {
+                    // Поддержка обоих форматов данных (из API и из локального хранилища)
+                    const categoryId = cat.id || (cat.category && cat.category.id);
+                    return categoryId === selectedCategory;
+                });
             });
         }
         
@@ -126,6 +134,9 @@ const useEventStore = create((set, get) => ({
         } else if (sortOption === 'name') {
             // Сортировка по названию (в алфавитном порядке)
             filtered.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (sortOption === 'price') {
+            // Сортировка по цене (от дешевых к дорогим)
+            filtered.sort((a, b) => a.price - b.price);
         }
         
         set({ filteredEvents: filtered });

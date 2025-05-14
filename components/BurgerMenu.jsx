@@ -1,3 +1,4 @@
+// dogpad.mobile/components/BurgerMenu.jsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Modal, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -29,7 +30,7 @@ const BurgerMenu = () => {
                 style={[styles.burgerButton, { backgroundColor: theme.colors.surface }]}
                 onPress={() => setIsOpen(true)}
             >
-                <MaterialIcons name="menu" size={24} color={theme.colors.text} />
+                <MaterialIcons name="menu" size={28} color="#3b82f6" />
             </TouchableOpacity>
 
             <Modal

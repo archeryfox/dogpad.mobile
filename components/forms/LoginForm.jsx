@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// dogpad.mobile/components/forms/LoginForm.jsx
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import useAuthStore from '../../stores/AuthStore';
@@ -16,7 +17,23 @@ const LoginForm = () => {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { login, error: authError } = useAuthStore();
+    const { login, error: authError, user } = useAuthStore();
+    
+    // Следим за изменениями в authError
+    useEffect(() => {
+        if (authError) {
+            setError(authError);
+            setLoading(false);
+        }
+    }, [authError]);
+    
+    // Следим за изменениями в user
+    useEffect(() => {
+        if (user) {
+            // Если пользователь авторизован, перенаправляем на главную страницу
+            router.replace('/(app)');
+        }
+    }, [user, router]);
 
     const handleChange = (key, value) => {
         setFormData({
@@ -35,21 +52,17 @@ const LoginForm = () => {
         }
 
         setLoading(true);
+        setError(null);
         console.log('Login attempt:', formData.username);
         
         try {
-            // Имитируем задержку API
-            await new Promise(resolve => setTimeout(resolve, 1500));
-            
             // Вызываем метод авторизации из хранилища
             await login(formData.username, formData.password);
             
-            // Если авторизация прошла успешно (не бросилось исключение), перенаправляем на главный экран
-            console.log('Авторизация успешна, перенаправляем на главную страницу');
-            router.replace('/(app)');
+            // Проверка результата авторизации происходит в useEffect
         } catch (err) {
-            setError('Ошибка при входе. Попробуйте позже.');
-            console.error('Login error:', err);
+            console.error('Login error in component:', err);
+            setError('Ошибка при входе. Проверьте соединение с интернетом.');
             setLoading(false);
         }
     };
@@ -59,7 +72,7 @@ const LoginForm = () => {
             <Text style={[styles.title, { color: theme.colors.text }]}>Вход</Text>
 
             {error && (
-                <View style={[styles.errorContainer, { backgroundColor: theme.colors.errorLight || '#fee2e2' }]}>
+                <View style={[styles.errorContainer, { backgroundColor: theme.colors.errorLight || '#fee2e2', borderColor: theme.colors.error || '#dc2626', borderWidth: 1 }]}>
                     <MaterialIcons name="error" size={20} color={theme.colors.error || '#dc2626'} />
                     <Text style={[styles.errorText, { color: theme.colors.error || '#dc2626' }]}>{error}</Text>
                 </View>
@@ -74,7 +87,7 @@ const LoginForm = () => {
                     theme={theme}
                     editable={!loading}
                     autoCapitalize="none"
-                    icon={<MaterialIcons name="person" size={24} color={theme.colors.text} />}
+                    icon={<MaterialIcons name="person" size={24} color={theme.colors.textSecondary} />}
                 />
                 <View style={styles.spacer} />
                 <Input
@@ -86,7 +99,7 @@ const LoginForm = () => {
                     theme={theme}
                     autoCapitalize="none"
                     editable={!loading}
-                    icon={<MaterialIcons name="lock" size={24} color={theme.colors.text} />}
+                    icon={<MaterialIcons name="lock" size={24} color={theme.colors.textSecondary} />}
                 />
                 <View style={styles.spacer} />
                 <Button
@@ -115,34 +128,36 @@ const LoginForm = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: 24,
+        justifyContent: 'center',
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
+        fontSize: 28,
+        fontWeight: '600',
+        marginBottom: 32,
         textAlign: 'center',
     },
     form: {
         width: '100%',
     },
     spacer: {
-        height: 16,
+        height: 20,
     },
     errorContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 8,
-        padding: 10,
-        borderRadius: 6,
+        marginBottom: 20,
+        padding: 12,
+        borderRadius: 12,
     },
     errorText: {
         marginLeft: 8,
         fontSize: 14,
+        fontWeight: '500',
     },
     registerButton: {
         marginTop: 16,
     },
 });
 
-export default LoginForm; 
+export default LoginForm;

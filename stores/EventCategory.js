@@ -1,3 +1,4 @@
+// dogpad.mobile/stores/EventCategory.js
 // stores/EventCategoryStore.js
 import { create } from 'zustand';
 import api, { routes } from "./axios.js";

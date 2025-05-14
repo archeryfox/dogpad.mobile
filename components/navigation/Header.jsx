@@ -1,3 +1,4 @@
+// dogpad.mobile/components/navigation/Header.jsx
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -29,7 +30,10 @@ const Header = ({ title = 'Dogpad', showBack = true }) => {
         >
             <View style={[
                 styles.header, 
-                { borderBottomColor: theme.colors.border }
+                { 
+                    borderBottomColor: '#f0f0f0',
+                    borderBottomWidth: 1,
+                }
             ]}>
                 <View style={styles.leftSection}>
                     {showBack && (
@@ -55,13 +59,19 @@ const Header = ({ title = 'Dogpad', showBack = true }) => {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        borderBottomWidth: 1,
+        borderBottomWidth: 0,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 16,
+        height: 60,
     },
     leftSection: {
         flexDirection: 'row',
@@ -80,7 +90,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         flex: 1,
+    },
+    menuButton: {
+        padding: 4,
     }
 });
 
-export default Header; 
+export default Header;

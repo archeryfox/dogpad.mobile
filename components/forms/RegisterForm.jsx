@@ -1,3 +1,4 @@
+// dogpad.mobile/components/forms/RegisterForm.jsx
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -68,7 +69,7 @@ const RegisterForm = () => {
             <Text style={[styles.title, { color: theme.colors.text }]}>Регистрация</Text>
 
             {displayError && (
-                <View style={[styles.errorContainer, { backgroundColor: theme.colors.errorLight || '#fee2e2' }]}>
+                <View style={[styles.errorContainer, { backgroundColor: theme.colors.errorLight || '#fee2e2', borderColor: theme.colors.error || '#dc2626', borderWidth: 1 }]}>
                     <MaterialIcons name="error" size={20} color={theme.colors.error || '#dc2626'} />
                     <Text style={[styles.errorText, { color: theme.colors.error || '#dc2626' }]}>{displayError}</Text>
                 </View>
@@ -82,7 +83,7 @@ const RegisterForm = () => {
                     placeholder="Введите ваше имя"
                     theme={theme}
                     editable={!isLoading}
-                    icon={<MaterialIcons name="person" size={24} color={theme.colors.text} />}
+                    icon={<MaterialIcons name="person" size={24} color={theme.colors.textSecondary} />}
                 />
                 
                 <View style={styles.spacer} />
@@ -96,7 +97,7 @@ const RegisterForm = () => {
                     autoCapitalize="none"
                     theme={theme}
                     editable={!isLoading}
-                    icon={<MaterialIcons name="email" size={24} color={theme.colors.text} />}
+                    icon={<MaterialIcons name="email" size={24} color={theme.colors.textSecondary} />}
                 />
                 
                 <View style={styles.spacer} />
@@ -109,7 +110,7 @@ const RegisterForm = () => {
                     secureTextEntry
                     theme={theme}
                     editable={!isLoading}
-                    icon={<MaterialIcons name="lock" size={24} color={theme.colors.text} />}
+                    icon={<MaterialIcons name="lock" size={24} color={theme.colors.textSecondary} />}
                 />
                 
                 <View style={styles.spacer} />
@@ -122,7 +123,7 @@ const RegisterForm = () => {
                     secureTextEntry
                     theme={theme}
                     editable={!isLoading}
-                    icon={<MaterialIcons name="lock" size={24} color={theme.colors.text} />}
+                    icon={<MaterialIcons name="lock" size={24} color={theme.colors.textSecondary} />}
                 />
                 
                 <View style={styles.spacer} />
@@ -156,12 +157,13 @@ const RegisterForm = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        padding: 24,
+        justifyContent: 'center',
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
+        fontSize: 28,
+        fontWeight: '600',
+        marginBottom: 32,
         textAlign: 'center',
     },
     form: {
@@ -170,16 +172,17 @@ const styles = StyleSheet.create({
     errorContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 16,
-        padding: 10,
-        borderRadius: 6,
+        marginBottom: 20,
+        padding: 12,
+        borderRadius: 12,
     },
     errorText: {
         marginLeft: 8,
         fontSize: 14,
+        fontWeight: '500',
     },
     spacer: {
-        height: 16,
+        height: 20,
     },
     button: {
         marginTop: 10,

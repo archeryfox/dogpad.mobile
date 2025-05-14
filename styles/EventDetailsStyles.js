@@ -1,3 +1,4 @@
+// dogpad.mobile/styles/EventDetailsStyles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontWeight: '600',
         marginBottom: 8,
     },
     date: {
@@ -27,6 +28,8 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         overflow: 'hidden',
         marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     eventImage: {
         width: '100%',
@@ -35,10 +38,13 @@ const styles = StyleSheet.create({
     section: {
         padding: 16,
         marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+        borderRadius: 12,
     },
     sectionTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '600',
         marginBottom: 8,
     },
     description: {
@@ -64,7 +70,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 12,
-        borderRadius: 8,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     mapButtonText: {
         marginLeft: 8,
@@ -79,8 +92,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         padding: 12,
-        borderRadius: 8,
+        borderRadius: 12,
         minWidth: 150,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     buttonText: {
         marginLeft: 8,
@@ -94,12 +114,12 @@ const styles = StyleSheet.create({
     tableContainer: {
         marginVertical: 10,
         borderWidth: 1,
-        borderRadius: 5,
+        borderColor: '#f0f0f0',
+        borderRadius: 12,
         overflow: 'hidden',
     },
     tableHeader: {
         flexDirection: 'row',
-        borderBottomWidth: 1,
     },
     tableHeaderCell: {
         padding: 8,
@@ -128,19 +148,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#2563eb',
         paddingVertical: 12,
         paddingHorizontal: 24,
-        borderRadius: 8,
+        borderRadius: 12,
         marginVertical: 16,
         marginHorizontal: 20,
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     subscribeButtonText: {
         color: 'white',
-        fontWeight: 'bold',
+        fontWeight: '600',
         fontSize: 16,
     },
     modalContainer: {
@@ -155,15 +175,15 @@ const styles = StyleSheet.create({
         padding: 24,
         width: '80%',
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-        elevation: 5,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     modalTitle: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontWeight: '600',
         marginBottom: 16,
         color: '#1f2937',
     },
@@ -182,9 +202,16 @@ const styles = StyleSheet.create({
     modalButton: {
         flex: 1,
         paddingVertical: 12,
-        borderRadius: 8,
+        borderRadius: 12,
         alignItems: 'center',
         marginHorizontal: 6,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     cancelButton: {
         backgroundColor: '#e5e7eb',
@@ -214,12 +241,18 @@ const styles = StyleSheet.create({
         padding: 20,
         borderRadius: 12,
         alignItems: 'center',
-        elevation: 5,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     qrContainer: {
         padding: 16,
-        borderRadius: 8,
+        borderRadius: 12,
         marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     qrText: {
         fontSize: 16,
@@ -229,9 +262,16 @@ const styles = StyleSheet.create({
     qrCloseButton: {
         width: '100%',
         padding: 12,
-        borderRadius: 6,
+        borderRadius: 12,
         alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
 });
 
-export default styles; 
+export default styles;

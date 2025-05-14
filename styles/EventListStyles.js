@@ -1,3 +1,4 @@
+// dogpad.mobile/styles/EventListStyles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
         color: '#666',
     },
     errorContainer: {
-        flex: 1,
+        flex: 1,    
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
@@ -44,15 +45,22 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     retryButton: {
-        backgroundColor: '#2563eb',
+        backgroundColor: '#3b82f6',
         paddingHorizontal: 16,
         paddingVertical: 8,
-        borderRadius: 8,
+        borderRadius: 20,
+        borderWidth: 0,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     retryButtonText: {
         color: 'white',
-        fontWeight: '600',
+        fontWeight: '500',
+        fontSize: 14,
     },
 });
 
-export default styles; 
+export default styles;

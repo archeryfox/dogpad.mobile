@@ -1,3 +1,4 @@
+// dogpad.mobile/stores/NoteStore.js
 import { create } from 'zustand';
 
 export const useNoteStore = create((set) => ({

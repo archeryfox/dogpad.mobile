@@ -1,5 +1,6 @@
+// dogpad.mobile/components/EventList.jsx
 import React from 'react';
-import { View, Text, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import EventCard from './cards/EventCard';
 import EventFilters from './filters/EventFilters';
@@ -7,14 +8,16 @@ import useAuthStore from '../stores/AuthStore';
 import useEventStore from '../stores/EventStore';
 import useSubscriptionStore from '../stores/SubscriptionStore';
 import useThemeStore from '../stores/ThemeStore';
+import useNotificationStore from '../stores/NotificationStore';
 import styles from '../styles/EventListStyles';
 
 const EventList = ({ events: propEvents, isLoading, onRefresh }) => {
     const router = useRouter();
     const { user } = useAuthStore();
     const { error, fetchEvents, filteredEvents } = useEventStore();
-    const { subscriptions, addSubscription, deleteSubscription } = useSubscriptionStore();
+    const { subscriptions, addSubscription, deleteSubscription, addPaidSubscription } = useSubscriptionStore();
     const { theme } = useThemeStore();
+    const { showNotification } = useNotificationStore();
     const [refreshing, setRefreshing] = React.useState(false);
 
     // Используем либо переданные события (props), либо отфильтрованные из store
@@ -57,10 +60,52 @@ const EventList = ({ events: propEvents, isLoading, onRefresh }) => {
 
     const handleSubscribe = (eventId) => {
         if (!user) {
-            alert("Пожалуйста, войдите в систему для подписки!");
+            showNotification("Пожалуйста, войдите в систему для подписки!", "warning");
             return;
         }
-        addSubscription({ eventId: eventId, userId: user.id });
+        
+        // Находим мероприятие по ID
+        const event = events.find(e => e.id === eventId);
+        
+        if (!event) {
+            showNotification("Мероприятие не найдено", "error");
+            return;
+        }
+        
+        // Проверяем, платное ли мероприятие
+        if (event.price && event.price > 0) {
+            // Показываем подтверждение для платного мероприятия
+            Alert.alert(
+                'Платное мероприятие',
+                `Стоимость подписки: ${event.price} монет. Ваш баланс: ${user.balance} монет. Продолжить?`,
+                [
+                    { text: 'Отмена', style: 'cancel' },
+                    {
+                        text: 'Подписаться',
+                        onPress: async () => {
+                            try {
+                                // Используем метод для подписки на платное мероприятие
+                                const result = await addPaidSubscription(
+                                    eventId,
+                                    user.id,
+                                    event.price
+                                );
+                                
+                                if (result) {
+                                    showNotification("Вы успешно подписались на мероприятие!", "success");
+                                }
+                            } catch (error) {
+                                console.error('Ошибка при подписке на платное мероприятие:', error);
+                                showNotification("Не удалось подписаться на мероприятие", "error");
+                            }
+                        }
+                    }
+                ]
+            );
+        } else {
+            // Бесплатное мероприятие
+            addSubscription({ eventId: eventId, userId: user.id });
+        }
     };
 
     const handleUnsubscribe = (eventId) => {
@@ -162,4 +207,4 @@ const EventList = ({ events: propEvents, isLoading, onRefresh }) => {
     );
 };
 
-export default EventList; 
+export default EventList;

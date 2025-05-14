@@ -1,3 +1,4 @@
+// dogpad.mobile/components/SpeakerProfile.jsx
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 import { format } from 'date-fns';
@@ -11,11 +12,11 @@ const SpeakerProfile = ({ speaker }) => {
     return (
         <View style={styles.wrapper}>
             <View style={[styles.profileHeader, { backgroundColor: theme.colors.primary }]}>
-                <Text style={[styles.profileTitle, { color:  'white', }]}>
+                <Text style={[styles.profileTitle, { color: 'white' }]}>
                     Профиль спикера
                 </Text>
             </View>
-            <View style={[styles.container, { backgroundColor: theme.colors.surface, borderColor: theme.colors.border }]}>
+            <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
                 <View style={styles.header}>
                     {speaker.avatar ? (
                         <Image
@@ -27,7 +28,7 @@ const SpeakerProfile = ({ speaker }) => {
                             }}
                         />
                     ) : (
-                        <View style={[styles.avatarPlaceholder, { backgroundColor: theme.colors.disabled }]}>
+                        <View style={[styles.avatarPlaceholder, { backgroundColor: theme.colors.background }]}>
                             <Text style={[styles.avatarPlaceholderText, { color: theme.colors.textSecondary }]}>
                                 {speaker.name.charAt(0).toUpperCase()}
                             </Text>
@@ -43,7 +44,7 @@ const SpeakerProfile = ({ speaker }) => {
                     <Text style={[styles.requestsTitle, { color: theme.colors.text }]}>Запросы на изменение роли:</Text>
                     {speaker?.RoleChangeRequest?.length > 0 ? (
                         speaker.RoleChangeRequest.map(request => (
-                            <View key={request.id} style={[styles.requestItem, { backgroundColor: theme.colors.light }]}>
+                            <View key={request.id} style={[styles.requestItem, { backgroundColor: theme.colors.background }]}>
                                 <Text style={[styles.requestText, { color: theme.colors.text }]}>
                                     <Text style={[styles.bold, { color: theme.colors.text }]}>Запрашиваемая роль:</Text> {request?.requestedRoleId}
                                 </Text>
@@ -64,4 +65,4 @@ const SpeakerProfile = ({ speaker }) => {
     );
 };
 
-export default SpeakerProfile; 
+export default SpeakerProfile;

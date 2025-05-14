@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(auth)/register.jsx
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

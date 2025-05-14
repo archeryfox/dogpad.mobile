@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/events/[id]/index.jsx
 import React, { useEffect } from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';

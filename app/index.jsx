@@ -1,3 +1,4 @@
+// dogpad.mobile/app/index.jsx
 import React, { useEffect } from 'react';
 import { Redirect } from 'expo-router';
 import useAuthStore from '../stores/AuthStore';

@@ -1,3 +1,4 @@
+// dogpad.mobile/components/EventDetails.jsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert, ScrollView, Image, Linking, Platform, Modal } from 'react-native';
 import { format } from 'date-fns';
@@ -19,7 +20,7 @@ const EventDetails = () => {
     const router = useRouter();
     const { events, deleteEvent } = useEventStore();
     const { user } = useAuthStore();
-    const { subscriptions, addSubscription, deleteSubscription } = useSubscriptionStore();
+    const { subscriptions, addSubscription, deleteSubscription, addPaidSubscription } = useSubscriptionStore();
     const { theme } = useThemeStore();
     const [showScanner, setShowScanner] = useState(false);
     const [showQRCode, setShowQRCode] = useState(false);
@@ -41,7 +42,7 @@ const EventDetails = () => {
         setIsModalOpen(false);
     };
 
-    const handleSubscribe = () => {
+    const handleSubscribe = async () => {
         if (!user) {
             Alert.alert('Ошибка', 'Пожалуйста, войдите в систему для подписки!');
             return;
@@ -50,7 +51,40 @@ const EventDetails = () => {
         if (isSubscribed && userSubscription) {
             deleteSubscription(userSubscription.id);
         } else {
-            addSubscription({ eventId: parseInt(id), userId: user.id });
+            // Проверяем, платное ли мероприятие
+            if (event.price && event.price > 0) {
+                // Показываем подтверждение для платного мероприятия
+                Alert.alert(
+                    'Платное мероприятие',
+                    `Стоимость подписки: ${event.price} монет. Ваш баланс: ${user.balance} монет. Продолжить?`,
+                    [
+                        { text: 'Отмена', style: 'cancel' },
+                        {
+                            text: 'Подписаться',
+                            onPress: async () => {
+                                try {
+                                    // Используем метод для подписки на платное мероприятие
+                                    const result = await addPaidSubscription(
+                                        parseInt(id),
+                                        user.id,
+                                        event.price
+                                    );
+                                    
+                                    if (result) {
+                                        Alert.alert('Успех', 'Вы успешно подписались на мероприятие!');
+                                    }
+                                } catch (error) {
+                                    console.error('Ошибка при подписке на платное мероприятие:', error);
+                                    Alert.alert('Ошибка', 'Не удалось подписаться на мероприятие');
+                                }
+                            }
+                        }
+                    ]
+                );
+            } else {
+                // Бесплатное мероприятие
+                addSubscription({ eventId: parseInt(id), userId: user.id });
+            }
         }
         closeModal();
     };

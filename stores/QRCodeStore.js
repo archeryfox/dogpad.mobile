@@ -1,3 +1,4 @@
+// dogpad.mobile/stores/QRCodeStore.js
 import { create } from 'zustand';
 import api, { routes } from './axios';
 import useSubscriptionStore from './SubscriptionStore';

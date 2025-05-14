@@ -1,3 +1,4 @@
+// dogpad.mobile/styles/SubscriptionFeedStyles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -6,11 +7,13 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 22,
+        fontWeight: '600',
         marginBottom: 16,
-        color: '#333',
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+        paddingBottom: 12,
     },
 });
 
-export default styles; 
+export default styles;

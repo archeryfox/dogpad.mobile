@@ -1,3 +1,4 @@
+// dogpad.mobile/app/auth/register.jsx
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import RegisterForm from '../../components/forms/RegisterForm';

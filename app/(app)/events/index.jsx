@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/events/index.jsx
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -94,7 +95,8 @@ const styles = StyleSheet.create({
     loadingText: {
         marginTop: 10,
         fontSize: 16,
+        fontWeight: '500',
     }
 });
 
-export default EventsScreen; 
+export default EventsScreen;

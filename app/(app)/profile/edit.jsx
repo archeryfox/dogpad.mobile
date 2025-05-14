@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/profile/edit.jsx
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';

@@ -1,9 +1,11 @@
+// dogpad.mobile/components/navigation/BurgerMenu.jsx
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import useAuthStore from '../../stores/AuthStore';
 import useThemeStore from '../../stores/ThemeStore';
+import ThemeToggle from '../ThemeToggle';
 
 const BurgerMenu = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,9 +33,9 @@ const BurgerMenu = () => {
     };
 
     return (
-        <View>
-            <TouchableOpacity onPress={toggleMenu} style={[styles.burgerButton, { backgroundColor: theme.colors.surface }]}>
-                <Ionicons name="menu" size={28} color={theme.colors.text} />
+        <View style={styles.menuContainer}>
+            <TouchableOpacity onPress={toggleMenu} style={[styles.burgerButton, { backgroundColor: 'transparent' }]}>
+                <Ionicons name="menu" size={28} color="#3b82f6" />
             </TouchableOpacity>
 
             <Modal
@@ -43,7 +45,16 @@ const BurgerMenu = () => {
                 onRequestClose={closeMenu}
             >
                 <View style={[styles.modalContainer, { backgroundColor: theme.colors.backdrop }]}>
-                    <View style={[styles.menuContent, { backgroundColor: theme.colors.surface }]}>
+                    <View style={[styles.menuContent, { 
+                        backgroundColor: theme.colors.surface,
+                        borderRightWidth: 1,
+                        borderRightColor: theme.colors.border,
+                        elevation: 0,
+                        shadowColor: 'transparent',
+                        shadowOffset: { width: 0, height: 0 },
+                        shadowOpacity: 0,
+                        shadowRadius: 0,
+                    }]}>
                         <View style={[styles.menuHeader, { borderBottomColor: theme.colors.border }]}>
                             <Text style={[styles.menuTitle, { color: theme.colors.text }]}>Меню</Text>
                             <TouchableOpacity onPress={closeMenu} style={styles.closeButton}>
@@ -68,6 +79,14 @@ const BurgerMenu = () => {
                                 <Text style={[styles.menuItemText, { color: theme.colors.text }]}>Профиль</Text>
                             </TouchableOpacity>
 
+                            {/* Блок переключения темы */}
+                            <View style={[styles.themeSection, { borderBottomColor: theme.colors.border }]}>
+                                <Text style={[styles.themeSectionTitle, { color: theme.colors.text }]}>
+                                    Тема оформления:
+                                </Text>
+                                <ThemeToggle />
+                            </View>
+
                             <TouchableOpacity 
                                 style={[styles.menuItem, styles.logoutButton]} 
                                 onPress={handleLogout}
@@ -84,6 +103,9 @@ const BurgerMenu = () => {
 };
 
 const styles = StyleSheet.create({
+    menuContainer: {
+        // Add styles for menuContainer if needed
+    },
     burgerButton: {
         padding: 10,
         zIndex: 1000,
@@ -109,7 +131,7 @@ const styles = StyleSheet.create({
     },
     menuTitle: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     closeButton: {
         padding: 5,
@@ -130,6 +152,14 @@ const styles = StyleSheet.create({
     logoutButton: {
         marginTop: 20,
         borderBottomWidth: 0,
+    },
+    themeSection: {
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+    },
+    themeSectionTitle: {
+        fontSize: 16,
+        marginBottom: 5,
     },
 });
 

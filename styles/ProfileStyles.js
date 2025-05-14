@@ -1,12 +1,19 @@
+// dogpad.mobile/styles/ProfileStyles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
     },
     header: {
         padding: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     profileSection: {
         marginBottom: 20,
@@ -17,7 +24,6 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#333',
         marginBottom: 12,
     },
     userInfo: {
@@ -31,18 +37,21 @@ const styles = StyleSheet.create({
         width: 80,
         height: 80,
         borderRadius: 40,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     avatarPlaceholder: {
         width: 80,
         height: 80,
         borderRadius: 40,
-        backgroundColor: '#e5e7eb',
+        backgroundColor: '#f5f5f5',
         alignItems: 'center',
         justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     avatarPlaceholderText: {
         fontSize: 32,
-        color: '#9ca3af',
     },
     infoContainer: {
         flex: 1,
@@ -50,30 +59,42 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#333',
         marginBottom: 4,
     },
     email: {
         fontSize: 16,
-        color: '#666',
         marginBottom: 8,
     },
     balance: {
         fontSize: 16,
-        color: '#333',
         marginBottom: 4,
     },
     role: {
         fontSize: 16,
-        color: '#333',
     },
     input: {
-        backgroundColor: '#f3f4f6',
-        borderRadius: 8,
+        borderRadius: 12,
         padding: 12,
-        marginBottom: 12,
+        marginBottom: 4,
         fontSize: 16,
-        color: '#1f2937',
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+    },
+    inputGroup: {
+        marginBottom: 16,
+    },
+    inputLabel: {
+        fontSize: 14,
+        marginBottom: 6,
+        fontWeight: '500',
+    },
+    editFormContainer: {
+        width: '100%',
+    },
+    editButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -83,6 +104,12 @@ const styles = StyleSheet.create({
     button: {
         flex: 1,
         marginHorizontal: 4,
+        borderRadius: 12,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     editButton: {
         backgroundColor: '#2563eb',
@@ -104,7 +131,6 @@ const styles = StyleSheet.create({
     },
     error: {
         fontSize: 16,
-        color: '#dc2626',
         textAlign: 'center',
         marginTop: 20,
     },
@@ -115,34 +141,43 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalContent: {
-        backgroundColor: 'white',
-        padding: 20,
-        borderRadius: 12,
+        padding: 24,
+        borderRadius: 16,
         alignItems: 'center',
-        width: '80%',
+        width: '85%',
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     qrContainer: {
         padding: 16,
-        backgroundColor: 'white',
-        borderRadius: 8,
+        borderRadius: 12,
         marginBottom: 16,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     qrText: {
         fontSize: 16,
-        color: '#333',
         marginBottom: 16,
         textAlign: 'center',
     },
     closeButton: {
         backgroundColor: '#6b7280',
         width: '100%',
+        borderRadius: 12,
     },
     themeSection: {
         marginTop: 16,
         marginBottom: 16,
         paddingHorizontal: 10,
         paddingVertical: 12,
-        borderRadius: 8,
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     themeSectionTitle: {
         fontSize: 16,
@@ -151,4 +186,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default styles; 
+export default styles;

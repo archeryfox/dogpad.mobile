@@ -1,3 +1,4 @@
+// dogpad.mobile/styles/index.js
 // Компоненты
 import BurgerMenuStyles from './BurgerMenuStyles';
 import EventDetailsStyles from './EventDetailsStyles';

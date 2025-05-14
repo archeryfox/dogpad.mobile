@@ -1,8 +1,10 @@
+// dogpad.mobile/components/cards/EventCard.jsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Modal, ScrollView, Linking, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { MaterialIcons } from '@expo/vector-icons';
 import useThemeStore from '../../stores/ThemeStore';
 import styles from '../../styles/cards/EventCardStyles';
 
@@ -43,6 +45,28 @@ const EventCard = ({ event, user, isSubscribed, onSubscribe, onUnsubscribe, inPr
 
     const eventDate = event.date ? new Date(event.date) : new Date();
     const formattedDate = format(eventDate, 'd MMMM yyyy', { locale: ru });
+    
+    // Проверяем, является ли мероприятие платным
+    const isPaid = event.price && event.price > 0;
+    const priceText = isPaid ? `${event.price} монет` : 'Бесплатно';
+    
+    // Функция для получения цвета категории
+    const getCategoryColor = (categoryName) => {
+        const colors = {
+            'Концерт': '#F87171', // красный
+            'Выставка': '#60A5FA', // синий
+            'Мастер-класс': '#34D399', // зеленый
+            'Лекция': '#A78BFA', // фиолетовый
+            'Фестиваль': '#FBBF24', // желтый
+            'Спорт': '#F97316', // оранжевый
+            'Театр': '#EC4899', // розовый
+            'Кино': '#8B5CF6', // пурпурный
+            'Вечеринка': '#10B981', // изумрудный
+            'Другое': '#6B7280', // серый
+        };
+        
+        return colors[categoryName] || '#6B7280'; // серый по умолчанию
+    };
 
     // Обработчик для форматирования описания с поддержкой Markdown
     const formatDescription = (text) => {
@@ -238,24 +262,19 @@ const EventCard = ({ event, user, isSubscribed, onSubscribe, onUnsubscribe, inPr
 
                                     // Если строка содержит ссылку
                                     if (hasLink) {
-                                        const parts = line.split(/(\[.*?\]\(.*?\))/g);
+                                        const parts = line.split(/(\[(.*?)\]\((.*?)\))/g);
 
                                         return (
                                             <Text key={`line-${lineIndex}`} style={styles.text}>
                                                 {parts.map((part, partIndex) => {
-                                                    const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
-                                                    if (linkMatch) {
-                                                        const linkText = linkMatch[1];
-                                                        const linkUrl = linkMatch[2];
-
+                                                    if (part.match(/\[(.*?)\]\((.*?)\)/)) {
+                                                        const linkText = part.match(/\[(.*?)\]/)[1];
+                                                        const linkUrl = part.match(/\((.*?)\)/)[1];
                                                         return (
                                                             <Text
                                                                 key={`part-${partIndex}`}
                                                                 style={styles.link}
-                                                                onPress={() => {
-                                                                    // Здесь можно добавить обработку нажатия на ссылку
-                                                                    console.log('Link pressed:', linkUrl);
-                                                                }}
+                                                                onPress={() => Linking.openURL(linkUrl)}
                                                             >
                                                                 {linkText}
                                                             </Text>
@@ -270,16 +289,15 @@ const EventCard = ({ event, user, isSubscribed, onSubscribe, onUnsubscribe, inPr
                                     // Если строка является элементом списка
                                     if (isListItem) {
                                         const listItemText = line.replace(/^\s*[-*+]\s/, '');
-
                                         return (
                                             <View key={`line-${lineIndex}`} style={styles.listItem}>
-                                                <Text style={styles.bullet}>•</Text>
-                                                <Text style={styles.listItemText}>{listItemText}</Text>
+                                                <Text style={styles.listItemBullet}>•</Text>
+                                                <Text style={styles.text}>{listItemText}</Text>
                                             </View>
                                         );
                                     }
 
-                                    // Если строка не содержит специальной разметки
+                                    // Обычный текст
                                     return (
                                         <Text key={`line-${lineIndex}`} style={styles.text}>
                                             {line}
@@ -295,41 +313,34 @@ const EventCard = ({ event, user, isSubscribed, onSubscribe, onUnsubscribe, inPr
     };
 
     // Функция для рендеринга таблицы
-    const renderTable = (tableText, blockIndex) => {
-        const rows = tableText.split('\n').filter(row => row.trim());
-
-        // Проверяем, есть ли заголовок таблицы
-        const hasHeader = rows.length > 0 && /^\|.*\|/.test(rows[0]);
-
-        // Проверяем, есть ли разделитель заголовка
-        const hasSeparator = rows.length > 1 && /^\|[\s-:|]+\|/.test(rows[1]);
-
-        // Определяем, с какой строки начинать данные
-        const dataStartIndex = hasHeader && hasSeparator ? 2 : 0;
-
-        // Получаем заголовки таблицы
-        const headers = hasHeader ? rows[0].split('|').filter(cell => cell.trim()).map(cell => cell.trim()) : [];
-
-        // Получаем данные таблицы
-        const data = rows.slice(dataStartIndex).map(row => {
-            return row.split('|').filter(cell => cell.trim()).map(cell => cell.trim());
-        });
-
+    const renderTable = (tableText, tableIndex) => {
+        const lines = tableText.split('\n').filter(line => line.trim());
+        
+        // Если таблица пустая, возвращаем null
+        if (lines.length < 2) return null;
+        
+        // Получаем заголовки и данные
+        const headers = lines[0].split('|').filter(cell => cell.trim()).map(cell => cell.trim());
+        
+        // Пропускаем разделительную строку (вторую строку)
+        const rows = lines.slice(2).map(line => 
+            line.split('|').filter(cell => cell.trim()).map(cell => cell.trim())
+        );
+        
         return (
-            <View key={`table-${blockIndex}`} style={styles.table}>
-                {hasHeader && (
-                    <View style={styles.tableHeader}>
-                        {headers.map((header, headerIndex) => (
-                            <Text key={`header-${headerIndex}`} style={styles.tableHeaderCell}>
-                                {header}
-                            </Text>
-                        ))}
-                    </View>
-                )}
-                {data.map((row, rowIndex) => (
+            <View key={`table-${tableIndex}`} style={styles.table}>
+                <View style={styles.tableHeader}>
+                    {headers.map((header, index) => (
+                        <Text key={`header-${index}`} style={[styles.tableHeaderCell, { flex: 1 }]}>
+                            {header}
+                        </Text>
+                    ))}
+                </View>
+                
+                {rows.map((row, rowIndex) => (
                     <View key={`row-${rowIndex}`} style={styles.tableRow}>
                         {row.map((cell, cellIndex) => (
-                            <Text key={`cell-${cellIndex}`} style={styles.tableCell}>
+                            <Text key={`cell-${rowIndex}-${cellIndex}`} style={[styles.tableCell, { flex: 1 }]}>
                                 {cell}
                             </Text>
                         ))}
@@ -339,191 +350,201 @@ const EventCard = ({ event, user, isSubscribed, onSubscribe, onUnsubscribe, inPr
         );
     };
 
-    // Функция для открытия адреса в приложении карт
-    const openMaps = (address) => {
-        const query = encodeURIComponent(address);
-        
-        // Разные схемы URL для iOS и Android
-        const url = Platform.select({
-            ios: `maps://maps.apple.com/?q=${query}`,
-            android: `geo:0,0?q=${query}`
-        });
-        
-        Linking.canOpenURL(url)
-            .then(supported => {
-                if (supported) {
-                    return Linking.openURL(url);
-                } else {
-                    // Используем веб-версию Google Maps как запасной вариант
-                    const webUrl = `https://maps.google.com/?q=${query}`;
-                    return Linking.openURL(webUrl);
-                }
-            })
-            .catch(err => console.error('Ошибка при открытии карты:', err));
-    };
-
-    const renderEventFooter = () => {
-        if (isSpeaker) {
-            return (
-                <View style={styles.cardFooter}>
-                    <View style={styles.speakerBadge}>
-                        <Text style={styles.speakerText}>Вы спикер</Text>
-                    </View>
-                </View>
-            );
-        } else if (isSubscribed) {
-            return (
-                <View style={styles.cardFooter}>
-                    <TouchableOpacity 
-                        style={[styles.subscribeButton, { backgroundColor: theme.colors.error }]} 
-                        onPress={openModal}
-                    >
-                        <Text style={styles.subscribeButtonText}>Отписаться</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        } else if (event.participantsLimit && event.participants && event.participants.length >= event.participantsLimit) {
-            return (
-                <View style={styles.cardFooter}>
-                    <TouchableOpacity style={[styles.subscribeButton, { backgroundColor: theme.colors.disabled }]} disabled>
-                        <Text style={styles.subscribeButtonText}>Мест нет</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        } else {
-            return (
-                <View style={styles.cardFooter}>
-                    <TouchableOpacity 
-                        style={[styles.subscribeButton, { backgroundColor: theme.colors.primary }]} 
-                        onPress={openModal}
-                    >
-                        <Text style={styles.subscribeButtonText}>Записаться</Text>
-                    </TouchableOpacity>
-                </View>
-            );
-        }
-    };
-
-    const renderParticipantsCount = () => {
-        if (event.participants) {
-            const count = event.participants.length;
-            const limit = event.participantsLimit;
-            
-            if (limit) {
-                return (
-                    <View style={styles.participantsContainer}>
-                        <Text style={[styles.participantsText, { color: theme.colors.text }]}>
-                            Участников: {count}/{limit}
-                        </Text>
-                    </View>
-                );
-            } else {
-                return (
-                    <View style={styles.participantsContainer}>
-                        <Text style={[styles.participantsText, { color: theme.colors.text }]}>
-                            Участников: {count}
-                        </Text>
-                    </View>
-                );
-            }
-        }
-        return null;
-    };
-
     return (
-        <TouchableOpacity
-            style={[styles.card, { backgroundColor: theme.colors.surface }]}
-            onPress={() => {
-                console.log('EventCard: Card pressed, navigating to event:', event.id);
-                router.push({
-                    pathname: "/(app)/events/[id]",
-                    params: { id: event.id }
-                });
-            }}
+        <TouchableOpacity 
+            style={[
+                styles.card, 
+                { backgroundColor: theme.colors.cardBackground }
+            ]}
+            onPress={() => router.push({
+                pathname: "/(app)/events/[id]",
+                params: { id: event.id }
+            })}
+            activeOpacity={0.9}
         >
-            <View style={styles.cardContent}>
-                <View style={styles.cardHeader}>
-                    <Text style={[styles.eventName, { color: theme.colors.text }]}>{event.name}</Text>
-                    <Text style={[styles.eventDate, { color: theme.colors.textSecondary }]}>{formattedDate}</Text>
-                </View>
-
+            {/* Карточка события */}
+            <View>
+                {/* Изображение события с градиентным оверлеем */}
                 {event.image && (
-                    <Image
-                        source={{ uri: event.image }}
-                        style={styles.eventImage}
-                        resizeMode="cover"
-                    />
+                    <View>
+                        <Image 
+                            source={{ uri: event.image }} 
+                            style={styles.eventImage}
+                            resizeMode="cover"
+                        />
+                    </View>
                 )}
-
-                <View style={styles.cardBody}>
-                    {/* <Text style={styles.eventDescription} numberOfLines={3}>
-                        {event.description ? formatDescription(event.description) : 'Описание отсутствует'}
-                    </Text>
-                     */}
+                
+                <View style={styles.cardContent}>
+                    {/* Заголовок и дата */}
+                    <View style={styles.cardHeader}>
+                        <Text style={[styles.eventName, { color: theme.colors.text }]} numberOfLines={2}>
+                            {event.name}
+                        </Text>
+                        <View style={styles.dateContainer}>
+                            <MaterialIcons name="event" size={16} color={theme.colors.textSecondary} />
+                            <Text style={[styles.eventDate, { color: theme.colors.textSecondary }]}>
+                                {formattedDate}
+                            </Text>
+                        </View>
+                    </View>
+                    
+                    {/* Категории */}
                     {event.categories && event.categories.length > 0 && (
                         <View style={styles.categoriesContainer}>
-                            {event.categories.map((category, index) => (
-                                <View key={index} style={[styles.categoryBadge, { backgroundColor: theme.colors.light }]}>
-                                    <Text style={[styles.categoryText, { color: theme.colors.textSecondary }]}>
-                                        {category.category.name}
-                                    </Text>
-                                </View>
-                            ))}
+                            {event.categories.map((cat, index) => {
+                                // Поддержка обоих форматов данных
+                                const category = cat.category || cat;
+                                const categoryName = category.name;
+                                const categoryColor = getCategoryColor(categoryName);
+                                
+                                return (
+                                    <View 
+                                        key={`cat-${index}`} 
+                                        style={[
+                                            styles.categoryBadge, 
+                                            { backgroundColor: categoryColor }
+                                        ]}
+                                    >
+                                        <Text style={styles.categoryText}>
+                                            {categoryName}
+                                        </Text>
+                                    </View>
+                                );
+                            })}
                         </View>
                     )}
-
-                    {event.venue && (
-                        <View style={styles.venueContainer}>
-                            <Text style={[styles.venueLabel, { color: theme.colors.textSecondary }]}>Место проведения:</Text>
-                            <Text style={[styles.venueName, { color: theme.colors.text }]}>{event.venue.name}</Text>
-                            <TouchableOpacity onPress={() => openMaps(event.venue.address)}>
-                                <Text style={[styles.venueAddress, styles.link, { color: theme.colors.link }]}>
-                                    {event.venue.address}
-                                </Text>
+                    
+                    {/* Цена */}
+                    <View style={styles.priceContainer}>
+                        <Text style={[styles.priceText, { color: theme.colors.text }]}>
+                            {priceText}
+                        </Text>
+                    </View>
+                    
+                    {/* Описание события (краткое) */}
+                    {event.description && (
+                        <View style={styles.cardBody}>
+                            {renderMarkdownText(event.description, 2)}
+                            <TouchableOpacity 
+                                style={styles.readMoreButton}
+                                onPress={() => router.push({
+                                    pathname: "/(app)/events/[id]",
+                                    params: { id: event.id }
+                                })}
+                            >
+                                <Text style={styles.readMoreText}>Подробнее</Text>
                             </TouchableOpacity>
                         </View>
                     )}
                     
-                    {renderParticipantsCount()}
+                    {/* Место проведения */}
+                    {event.venue && (
+                        <View style={styles.venueContainer}>
+                            <View style={styles.venueRow}>
+                                <MaterialIcons name="location-on" size={16} color={theme.colors.textSecondary} />
+                                <Text style={[styles.venueName, { color: theme.colors.text }]}>
+                                    {event.venue.name}
+                                </Text>
+                            </View>
+                            {event.venue.address && (
+                                <Text style={[styles.venueAddress, { color: theme.colors.textSecondary }]}>
+                                    {event.venue.address}
+                                </Text>
+                            )}
+                        </View>
+                    )}
+                    
+                    {/* Количество участников */}
+                    {event.participantsCount > 0 && (
+                        <View style={styles.participantsContainer}>
+                            <View style={styles.participantsRow}>
+                                <MaterialIcons name="people" size={16} color={theme.colors.textSecondary} />
+                                <Text style={[styles.participantsText, { color: theme.colors.textSecondary }]}>
+                                    {event.participantsCount} {event.participantsCount === 1 ? 'участник' : 
+                                    event.participantsCount < 5 ? 'участника' : 'участников'}
+                                </Text>
+                            </View>
+                        </View>
+                    )}
+                    
+                    {/* Кнопки действий */}
+                    <View style={styles.cardFooter}>
+                        {isSpeaker ? (
+                            <View style={[styles.speakerBadge, { backgroundColor: theme.colors.successLight }]}>
+                                <Text style={[styles.speakerText, { color: theme.colors.success }]}>
+                                    Вы спикер
+                                </Text>
+                            </View>
+                        ) : user ? (
+                            <TouchableOpacity 
+                                style={[
+                                    styles.subscribeButton, 
+                                    { 
+                                        backgroundColor: isSubscribed ? 
+                                            theme.colors.warningLight : 
+                                            theme.colors.primary 
+                                    }
+                                ]}
+                                onPress={openModal}
+                            >
+                                <Text style={[
+                                    styles.subscribeButtonText, 
+                                    { 
+                                        color: isSubscribed ? 
+                                            theme.colors.warning : 
+                                            theme.colors.buttonText 
+                                    }
+                                ]}>
+                                    {isSubscribed ? 'Отписаться' : 'Подписаться'}
+                                </Text>
+                            </TouchableOpacity>
+                        ) : null}
+                    </View>
                 </View>
-
-                {renderEventFooter()}
             </View>
-
+            
+            {/* Модальное окно подтверждения */}
             <Modal
                 visible={isModalOpen}
                 transparent={true}
-                animationType="slide"
+                animationType="fade"
                 onRequestClose={closeModal}
             >
-                <View style={[styles.modalContainer, { backgroundColor: theme.colors.backdrop }]}>
-                    <View style={[styles.modalContent, { backgroundColor: theme.colors.surface }]}>
-                        <Text style={[styles.modalTitle, { color: theme.colors.text }]}>Подписка на мероприятие</Text>
-                        <Text style={[styles.modalText, { color: theme.colors.text }]}>
-                            Вы уверены, что хотите {isSubscribed ? 'отписаться от' : 'подписаться на'} мероприятие "{event.name}"?
+                <View style={styles.modalContainer}>
+                    <View style={[styles.modalContent, { backgroundColor: theme.colors.cardBackground }]}>
+                        <Text style={[styles.modalTitle, { color: theme.colors.text }]}>
+                            {isSubscribed ? 'Отписаться от события?' : 'Подписаться на событие?'}
                         </Text>
-
-                        <View style={styles.modalButtons}>
-                            <TouchableOpacity
-                                style={[styles.modalButton, styles.cancelButton, { backgroundColor: theme.colors.light }]}
-                                onPress={closeModal}
-                            >
-                                <Text style={[styles.cancelButtonText, { color: theme.colors.textSecondary }]}>Отмена</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
+                        <Text style={[styles.modalText, { color: theme.colors.textSecondary }]}>
+                            {isSubscribed 
+                                ? 'Вы уверены, что хотите отписаться от этого события? Вы больше не будете получать уведомления о нем.'
+                                : 'Подписавшись на это событие, вы будете получать уведомления о любых изменениях и обновлениях.'}
+                        </Text>
+                        <View style={styles.modalButtonsContainer}>
+                            <TouchableOpacity 
                                 style={[
                                     styles.modalButton, 
-                                    styles.confirmButton, 
+                                    { backgroundColor: theme.colors.backgroundSecondary }
+                                ]}
+                                onPress={closeModal}
+                            >
+                                <Text style={[styles.modalButtonText, { color: theme.colors.textSecondary }]}>
+                                    Отмена
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity 
+                                style={[
+                                    styles.modalButton, 
                                     { 
-                                        backgroundColor: isSubscribed 
-                                            ? theme.colors.error 
-                                            : theme.colors.primary 
+                                        backgroundColor: isSubscribed ? 
+                                            theme.colors.warning : 
+                                            theme.colors.primary 
                                     }
                                 ]}
                                 onPress={handleSubscribe}
                             >
-                                <Text style={[styles.confirmButtonText, { color: theme.colors.buttonText }]}>
+                                <Text style={[styles.modalButtonText, { color: theme.colors.buttonText }]}>
                                     {isSubscribed ? 'Отписаться' : 'Подписаться'}
                                 </Text>
                             </TouchableOpacity>
@@ -535,4 +556,4 @@ const EventCard = ({ event, user, isSubscribed, onSubscribe, onUnsubscribe, inPr
     );
 };
 
-export default EventCard; 
+export default EventCard;

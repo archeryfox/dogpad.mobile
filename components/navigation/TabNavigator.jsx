@@ -1,3 +1,4 @@
+// dogpad.mobile/components/navigation/TabNavigator.jsx
 import React, { useState, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -68,7 +69,20 @@ const TabNavigator = () => {
                 tabBarInactiveTintColor: theme.colors.textSecondary,
                 tabBarStyle: {
                     backgroundColor: '#fff',
-                    borderTopColor: theme.colors.border,
+                    borderTopColor: '#f0f0f0',
+                    borderTopWidth: 1,
+                    elevation: 0,
+                    shadowColor: 'transparent',
+                    shadowOffset: { width: 0, height: 0 },
+                    shadowOpacity: 0,
+                    shadowRadius: 0,
+                    height: 60,
+                    paddingBottom: 10,
+                    paddingTop: 5,
+                },
+                tabBarLabelStyle: {
+                    fontSize: 12,
+                    fontWeight: '500',
                 },
                 header: ({ route }) => {
                     // Для Events не показываем заголовок
@@ -79,7 +93,13 @@ const TabNavigator = () => {
                     return (
                         <View style={[styles.header, { 
                             backgroundColor: theme.colors.surface, 
-                            borderBottomColor: theme.colors.border 
+                            borderBottomColor: '#f0f0f0',
+                            borderBottomWidth: 1,
+                            elevation: 0,
+                            shadowColor: 'transparent',
+                            shadowOffset: { width: 0, height: 0 },
+                            shadowOpacity: 0,
+                            shadowRadius: 0,
                         }]}>
                             <BurgerMenu />
                             <Text style={[styles.headerTitle, { color: theme.colors.text }]}>

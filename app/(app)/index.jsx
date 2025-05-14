@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/index.jsx
 import React from 'react';
 import { Redirect } from 'expo-router';
 

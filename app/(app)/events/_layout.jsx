@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/events/_layout.jsx
 import { Stack } from 'expo-router';
 
 export default function EventsLayout() {

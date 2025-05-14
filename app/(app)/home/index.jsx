@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/home/index.jsx
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, ActivityIndicator, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';

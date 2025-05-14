@@ -1,3 +1,4 @@
+// dogpad.mobile/components/ui/IconSymbol.tsx
 // This file is a fallback for using MaterialIcons on Android and web.
 
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';

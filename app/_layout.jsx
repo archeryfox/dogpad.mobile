@@ -1,3 +1,4 @@
+// dogpad.mobile/app/_layout.jsx
 import React, { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -5,6 +6,7 @@ import { useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useAuthStore from '../stores/AuthStore';
 import useThemeStore from '../stores/ThemeStore';
+import Notification from '../components/ui/Notification';
 
 const RootLayout = () => {
     const { user, checkAuth } = useAuthStore();
@@ -26,6 +28,8 @@ const RootLayout = () => {
 
     return (
         <SafeAreaProvider>
+            <StatusBar style={isDarkMode ? 'light' : 'dark'} />
+            <Notification />
             <Stack
                 screenOptions={{
                     headerStyle: {
@@ -60,4 +64,4 @@ const RootLayout = () => {
     );
 };
 
-export default RootLayout; 
+export default RootLayout;

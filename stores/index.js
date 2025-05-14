@@ -1,3 +1,4 @@
+// dogpad.mobile/stores/index.js
 export { useNoteStore } from './NoteStore.js';
 export { useTaskStore } from './TaskStore.js';
 export { useAuthStore } from './AuthStore.js';

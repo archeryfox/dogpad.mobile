@@ -1,9 +1,11 @@
+// dogpad.mobile/components/SubscriptionFeed.jsx
 import React, { useEffect, Fragment } from 'react';
 import { View, Text } from 'react-native';
 import useAuthStore from '../stores/AuthStore';
 import useSubscriptionStore from '../stores/SubscriptionStore';
 import useEventStore from '../stores/EventStore';
 import useThemeStore from '../stores/ThemeStore';
+import useNotificationStore from '../stores/NotificationStore';
 import EventList from './EventList';
 import styles from '../styles/SubscriptionFeedStyles';
 
@@ -12,6 +14,7 @@ const SubscriptionFeed = ({ inProfile }) => {
     const { subscriptions, fetchSubscriptions, deleteSubscription, addSubscription } = useSubscriptionStore();
     const { events, fetchEvents, isLoading, error } = useEventStore();
     const { theme } = useThemeStore();
+    const { showNotification } = useNotificationStore();
 
     useEffect(() => {
         console.log('SubscriptionFeed: Fetching events and subscriptions');
@@ -25,7 +28,7 @@ const SubscriptionFeed = ({ inProfile }) => {
 
     const handleSubscribe = (eventId) => {
         if (!user) {
-            alert("Пожалуйста, войдите в систему для подписки!");
+            showNotification("Пожалуйста, войдите в систему для подписки!", "warning");
             return;
         }
         addSubscription({ eventId: eventId, userId: user.id });
@@ -49,8 +52,8 @@ const SubscriptionFeed = ({ inProfile }) => {
     });
 
     return (
-        <Fragment>
-            <Text style={[styles.title, { color: theme.colors.text, backgroundColor: theme.colors.surface, padding: 16 }]}>Ваши подписки</Text>
+        <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+            <Text style={[styles.title, { color: theme.colors.text }]}>Ваши подписки</Text>
             <EventList 
                 events={subscribedEvents}
                 isLoading={isLoading}
@@ -58,8 +61,8 @@ const SubscriptionFeed = ({ inProfile }) => {
                 onSubscribe={handleSubscribe}
                 onUnsubscribe={handleDeleteSubscription}
             />
-        </Fragment>
+        </View>
     );
 };
 
-export default SubscriptionFeed; 
+export default SubscriptionFeed;

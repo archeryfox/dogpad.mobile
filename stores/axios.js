@@ -1,9 +1,10 @@
+// dogpad.mobile/stores/axios.js
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // The base URL for API requests
-const API_URL = 'https://timapad666.onrender.com'; 
-const BACKUP_SERVER_URL = 'https://dogpad-saver-4uah.onrender.com';
+const API_URL =  process.env.EXPO_PUBLIC_API_URL || 'https://timapad666.onrender.com';
+const BACKUP_SERVER_URL = process.env.EXPO_PUBLIC_BACKUP_SERVER_URL || 'https://dogpad-saver-4uah.onrender.com';
 
 // Create an instance of axios with the base URL of the API
 const api = axios.create({
@@ -17,17 +18,17 @@ const api = axios.create({
 // Добавляем перехватчик для установки токена авторизации
 api.interceptors.request.use(async (config) => {
     console.log(`API Request: ${config.method.toUpperCase()} ${config.url}`);
-    
+
     // Список публичных маршрутов, которые не требуют авторизации
     const publicRoutes = [
         '/auth/login',
         '/auth/register',
         '/events'  // Добавляем маршрут событий в публичные
     ];
-    
+
     // Проверяем, является ли текущий маршрут публичным
     const isPublicRoute = publicRoutes.some(route => config.url.includes(route));
-    
+
     // Если маршрут не публичный, добавляем токен авторизации
     if (!isPublicRoute) {
         const token = await AsyncStorage.getItem('token');
@@ -35,7 +36,7 @@ api.interceptors.request.use(async (config) => {
             config.headers.Authorization = `Bearer ${token}`;
         }
     }
-    
+
     return config;
 });
 
@@ -45,8 +46,56 @@ api.interceptors.response.use(
         console.log(`API Response: ${response.status} ${response.config.url}`);
         return response;
     },
-    error => {
-        console.error('API Error:', error.config?.url, error.response?.status, error.response?.data || error.message);
+    async error => {
+        // Получаем информацию о запросе
+        const originalRequest = error.config;
+        const url = originalRequest?.url || 'unknown';
+        const status = error.response?.status;
+        const data = error.response?.data || {};
+
+        console.error('API Error:', url, status, data);
+
+        // Если ошибка связана с авторизацией (401) и это не запрос на авторизацию
+        if (status === 401 && !url.includes('/auth/login') && !originalRequest._retry) {
+            // Помечаем запрос как повторный
+            originalRequest._retry = true;
+
+            try {
+                // Попытка обновить токен (если у вас есть такой функционал)
+                // const refreshToken = await AsyncStorage.getItem('refreshToken');
+                // const response = await axios.post(`${API_URL}/auth/refresh`, { refreshToken });
+                // const newToken = response.data.token;
+                // await AsyncStorage.setItem('token', newToken);
+                // originalRequest.headers.Authorization = `Bearer ${newToken}`;
+
+                // Повторяем оригинальный запрос с новым токеном
+                // return api(originalRequest);
+
+                // Если нет механизма обновления токена, просто выходим из системы
+                await AsyncStorage.removeItem('token');
+                await AsyncStorage.removeItem('user');
+                return Promise.reject(error);
+            } catch (refreshError) {
+                // Если не удалось обновить токен, выходим из системы
+                await AsyncStorage.removeItem('token');
+                await AsyncStorage.removeItem('user');
+                return Promise.reject(error);
+            }
+        }
+
+        // Для ошибок сервера (500), можно добавить повторные попытки
+        if (status >= 500 && !originalRequest._serverRetry && !url.includes('/auth/login')) {
+            // Ограничиваем количество повторных попыток
+            originalRequest._serverRetry = true;
+
+            // Ждем некоторое время перед повторной попыткой
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Повторяем запрос
+            return api(originalRequest);
+        }
+
+        // Для всех остальных ошибок просто отклоняем промис
         return Promise.reject(error);
     }
 );
@@ -70,4 +119,4 @@ export const routes = {
     logs: `${BACKUP_SERVER_URL}/logs`,
 }
 
-export default api; 
+export default api;

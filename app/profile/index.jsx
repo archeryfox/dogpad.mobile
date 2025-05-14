@@ -1,3 +1,4 @@
+// dogpad.mobile/app/profile/index.jsx
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';

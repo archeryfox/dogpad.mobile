@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/profile/_layout.jsx
 import { Stack } from 'expo-router';
 import useThemeStore from '../../../stores/ThemeStore';
 

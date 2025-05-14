@@ -1,6 +1,7 @@
+// dogpad.mobile/components/QRScanner.jsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Modal } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { BarCodeScanner } from 'expo-camera';
 import { MaterialIcons } from '@expo/vector-icons';
 import useThemeStore from '../stores/ThemeStore';
 import styles from '../styles/QRScannerStyles';

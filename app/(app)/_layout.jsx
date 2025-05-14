@@ -1,3 +1,4 @@
+// dogpad.mobile/app/(app)/_layout.jsx
 import React from 'react';
 import { Stack } from 'expo-router';
 import TabNavigator from '../../components/navigation/TabNavigator';

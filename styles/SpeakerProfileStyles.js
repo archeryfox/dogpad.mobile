@@ -1,3 +1,4 @@
+// dogpad.mobile/styles/SpeakerProfileStyles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -7,21 +8,31 @@ const styles = StyleSheet.create({
     profileHeader: {
         paddingVertical: 12,
         paddingHorizontal: 16,
-        borderTopLeftRadius: 8,
-        borderTopRightRadius: 8,
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     profileTitle: {
         fontSize: 18,
-       
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     container: {
         padding: 16,
-        borderRadius: 8,
+        borderRadius: 12,
         borderWidth: 1,
+        borderColor: '#f0f0f0',
         marginBottom: 16,
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     header: {
         flexDirection: 'row',
@@ -33,6 +44,8 @@ const styles = StyleSheet.create({
         height: 60,
         borderRadius: 30,
         marginRight: 16,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     avatarPlaceholder: {
         width: 60,
@@ -41,41 +54,46 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginRight: 16,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     avatarPlaceholderText: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     info: {
         flex: 1,
     },
     name: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '600',
         marginBottom: 6,
     },
     biography: {
         fontSize: 14,
+        lineHeight: 20,
     },
     requestsSection: {
         marginTop: 16,
     },
     requestsTitle: {
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '600',
         marginBottom: 8,
     },
     requestItem: {
         padding: 12,
-        borderRadius: 8,
+        borderRadius: 12,
         marginBottom: 8,
+        borderWidth: 1,
+        borderColor: '#f0f0f0',
     },
     requestText: {
         fontSize: 14,
         marginBottom: 4,
     },
     bold: {
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     requestDate: {
         fontSize: 12,
@@ -87,4 +105,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default styles; 
+export default styles;

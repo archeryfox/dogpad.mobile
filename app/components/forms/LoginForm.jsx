@@ -1,3 +1,4 @@
+// dogpad.mobile/app/components/forms/LoginForm.jsx
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import useAuthStore from '../../../stores/AuthStore';

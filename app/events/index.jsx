@@ -1,3 +1,4 @@
+// dogpad.mobile/app/events/index.jsx
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import EventList from '../../components/EventList';

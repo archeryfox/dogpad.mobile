@@ -1,3 +1,4 @@
+// dogpad.mobile/theme/theme.js
 export const lightTheme = {
   colors: {
     primary: '#2563eb',

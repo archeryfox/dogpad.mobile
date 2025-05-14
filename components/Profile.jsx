@@ -1,10 +1,10 @@
+// dogpad.mobile/components/Profile.jsx
 import React, { useState } from 'react';
 import { View, Text, FlatList, Image, TextInput, Modal, TouchableOpacity } from 'react-native';
 import QRCode from 'react-qr-code';
 import Button from './ui/Button';
 import SubscriptionFeed from './SubscriptionFeed';
 import SpeakerProfile from './SpeakerProfile';
-import ThemeToggle from './ThemeToggle';
 import useThemeStore from '../stores/ThemeStore';
 import styles from '../styles/ProfileStyles';
 
@@ -100,32 +100,68 @@ const Profile = ({ user, onLogout }) => {
 
                     <View style={styles.infoContainer}>
                         {isEditing ? (
-                            <>
-                                <TextInput
-                                    style={[styles.input, { backgroundColor: theme.colors.light, color: theme.colors.text }]}
-                                    value={editData.name}
-                                    onChangeText={(text) => setEditData({ ...editData, name: text })}
-                                    placeholder="Имя"
-                                    placeholderTextColor={theme.colors.placeholder}
-                                />
-                                <TextInput
-                                    style={[styles.input, { backgroundColor: theme.colors.light, color: theme.colors.text }]}
-                                    value={editData.email}
-                                    onChangeText={(text) => setEditData({ ...editData, email: text })}
-                                    placeholder="Email"
-                                    placeholderTextColor={theme.colors.placeholder}
-                                    keyboardType="email-address"
-                                    autoCapitalize="none"
-                                />
-                                <TextInput
-                                    style={[styles.input, { backgroundColor: theme.colors.light, color: theme.colors.text }]}
-                                    value={editData.avatar}
-                                    onChangeText={(text) => setEditData({ ...editData, avatar: text })}
-                                    placeholder="URL аватара"
-                                    placeholderTextColor={theme.colors.placeholder}
-                                    autoCapitalize="none"
-                                />
-                            </>
+                            <View style={styles.editFormContainer}>
+                                <View style={styles.inputGroup}>
+                                    <Text style={[styles.inputLabel, { color: theme.colors.textSecondary }]}>Имя</Text>
+                                    <TextInput
+                                        style={[styles.input, { 
+                                            backgroundColor: theme.dark ? theme.colors.light : theme.colors.light, 
+                                            color: '#000000',
+                                            borderColor: theme.colors.border
+                                        }]}
+                                        value={editData.name}
+                                        onChangeText={(text) => setEditData({ ...editData, name: text })}
+                                        placeholder="Введите ваше имя"
+                                        placeholderTextColor="#666666"
+                                    />
+                                </View>
+                                
+                                <View style={styles.inputGroup}>
+                                    <Text style={[styles.inputLabel, { color: theme.colors.textSecondary }]}>Email</Text>
+                                    <TextInput
+                                        style={[styles.input, { 
+                                            backgroundColor: theme.dark ? theme.colors.light : theme.colors.light, 
+                                            color: '#000000',
+                                            borderColor: theme.colors.border
+                                        }]}
+                                        value={editData.email}
+                                        onChangeText={(text) => setEditData({ ...editData, email: text })}
+                                        placeholder="Введите ваш email"
+                                        placeholderTextColor="#666666"
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                    />
+                                </View>
+                                
+                                <View style={styles.inputGroup}>
+                                    <Text style={[styles.inputLabel, { color: theme.colors.textSecondary }]}>URL аватара</Text>
+                                    <TextInput
+                                        style={[styles.input, { 
+                                            backgroundColor: theme.dark ? theme.colors.light : theme.colors.light, 
+                                            color: '#000000',
+                                            borderColor: theme.colors.border
+                                        }]}
+                                        value={editData.avatar}
+                                        onChangeText={(text) => setEditData({ ...editData, avatar: text })}
+                                        placeholder="Введите URL изображения"
+                                        placeholderTextColor="#666666"
+                                        autoCapitalize="none"
+                                    />
+                                </View>
+                                
+                                <View style={styles.editButtonsContainer}>
+                                    <Button
+                                        title="Сохранить"
+                                        onPress={handleSaveChanges}
+                                        style={[styles.button, styles.saveButton]}
+                                    />
+                                    <Button
+                                        title="Отменить"
+                                        onPress={handleEditToggle}
+                                        style={[styles.button, styles.cancelButton]}
+                                    />
+                                </View>
+                            </View>
                         ) : (
                             <>
                                 <Text style={[styles.name, { color: theme.colors.text }]}>{user.name}</Text>
@@ -137,37 +173,27 @@ const Profile = ({ user, onLogout }) => {
                     </View>
                 </View>
 
-                {/* Настройки темы */}
-                <View style={styles.themeSection}>
-                    <Text style={[styles.themeSectionTitle, { color: theme.colors.text }]}>Тема оформления:</Text>
-                    <ThemeToggle />
-                </View>
-
                 {/* Action Buttons */}
                 <View style={styles.buttonContainer}>
-                    <Button
-                        title={isEditing ? "Сохранить" : "Редактировать"}
-                        onPress={isEditing ? handleSaveChanges : handleEditToggle}
-                        style={[styles.button, isEditing ? styles.saveButton : styles.editButton]}
-                    />
-                    {isEditing ? (
-                        <Button
-                            title="Отменить"
-                            onPress={handleEditToggle}
-                            style={[styles.button, styles.cancelButton]}
-                        />
-                    ) : (
-                        <Button
-                            title="QR код"
-                            onPress={() => setShowQRCode(true)}
-                            style={[styles.button, styles.qrButton]}
-                        />
+                    {!isEditing && (
+                        <>
+                            <Button
+                                title="Редактировать"
+                                onPress={handleEditToggle}
+                                style={[styles.button, styles.editButton]}
+                            />
+                            <Button
+                                title="QR код"
+                                onPress={() => setShowQRCode(true)}
+                                style={[styles.button, styles.qrButton]}
+                            />
+                            <Button
+                                title="Выйти"
+                                onPress={onLogout}
+                                style={[styles.button, styles.logoutButton]}
+                            />
+                        </>
                     )}
-                    <Button
-                        title="Выйти"
-                        onPress={onLogout}
-                        style={[styles.button, styles.logoutButton]}
-                    />
                 </View>
             </View>
         </View>
@@ -222,7 +248,6 @@ const Profile = ({ user, onLogout }) => {
                     }
                 }}
                 keyExtractor={item => item.key}
-                stickyHeaderIndices={[0]}
                 contentContainerStyle={{ flexGrow: 1 }}
             />
         </View>

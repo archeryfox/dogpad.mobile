@@ -1,3 +1,4 @@
+// dogpad.mobile/components/ui/Button.jsx
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, View } from 'react-native';
 
@@ -143,26 +144,31 @@ const Button = ({
 
 const styles = StyleSheet.create({
     button: {
-        borderRadius: 8,
+        borderRadius: 12,
         padding: 16,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     buttonSmall: {
-        padding: 8,
-        borderRadius: 6,
+        padding: 10,
+        borderRadius: 10,
     },
     buttonLarge: {
         padding: 18,
-        borderRadius: 10,
+        borderRadius: 14,
     },
     buttonDisabled: {
         // Стили применяются динамически
     },
     buttonText: {
         fontSize: 16,
-        fontWeight: 'bold',
+        fontWeight: '600',
         textAlign: 'center',
     },
     textSmall: {

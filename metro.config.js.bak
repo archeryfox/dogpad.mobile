@@ -1,0 +1,11 @@
+// Конфигурация Metro для мобильной части програмного комплекса DogPad
+const { getDefaultConfig } = require('@expo/metro-config');
+
+// 1. Получаем базовую конфигурацию Metro от Expo
+const defaultConfig = getDefaultConfig(__dirname);
+
+// 2. Добавляем поддержку для дополнительных расширений файлов
+defaultConfig.resolver.assetExts.push('db');
+
+// 3. Экспортируем модифицированную конфигурацию
+module.exports = defaultConfig;

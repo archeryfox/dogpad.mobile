@@ -1,3 +1,4 @@
+// dogpad.mobile/components/filters/EventFilters.jsx
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Modal, FlatList } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -39,6 +40,8 @@ const EventFilters = () => {
                 return 'По дате';
             case 'name':
                 return 'По названию';
+            case 'price':
+                return 'По цене';
             default:
                 return 'По дате';
         }
@@ -68,7 +71,7 @@ const EventFilters = () => {
             {/* Поле поиска */}
             <View style={[styles.searchContainer, { 
                 backgroundColor: theme.colors.surface,
-                borderColor: theme.colors.border,
+                borderColor: '#f0f0f0',
             }]}>
                 <MaterialIcons name="search" size={24} color={theme.colors.textSecondary} />
                 <TextInput
@@ -95,7 +98,7 @@ const EventFilters = () => {
                     <TouchableOpacity 
                         style={[styles.filterButton, { 
                             backgroundColor: theme.colors.surface,
-                            borderColor: theme.colors.border,
+                            borderColor: '#f0f0f0',
                         }]}
                         onPress={() => setShowCategoryModal(true)}
                     >
@@ -114,7 +117,7 @@ const EventFilters = () => {
                     <TouchableOpacity 
                         style={[styles.filterButton, { 
                             backgroundColor: theme.colors.surface,
-                            borderColor: theme.colors.border,
+                            borderColor: '#f0f0f0',
                         }]}
                         onPress={() => setShowSortModal(true)}
                     >
@@ -150,7 +153,7 @@ const EventFilters = () => {
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalContent, { 
                         backgroundColor: theme.colors.surface,
-                        borderColor: theme.colors.border,
+                        borderColor: '#f0f0f0',
                     }]}>
                         <View style={styles.modalHeader}>
                             <Text style={[styles.modalTitle, { color: theme.colors.text }]}>Выберите категорию</Text>
@@ -206,7 +209,7 @@ const EventFilters = () => {
                 <View style={styles.modalOverlay}>
                     <View style={[styles.modalContent, { 
                         backgroundColor: theme.colors.surface,
-                        borderColor: theme.colors.border,
+                        borderColor: '#f0f0f0',
                     }]}>
                         <View style={styles.modalHeader}>
                             <Text style={[styles.modalTitle, { color: theme.colors.text }]}>Сортировать по</Text>
@@ -219,6 +222,7 @@ const EventFilters = () => {
                             data={[
                                 { id: 'date', name: 'По дате' },
                                 { id: 'name', name: 'По названию' },
+                                { id: 'price', name: 'По цене' },
                             ]}
                             keyExtractor={item => item.id}
                             renderItem={({ item }) => (
@@ -272,9 +276,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         borderWidth: 1,
-        borderRadius: 8,
+        borderRadius: 12,
         paddingHorizontal: 12,
-        paddingVertical: 8,
+        paddingVertical: 10,
         marginBottom: 16,
     },
     searchInput: {
@@ -301,13 +305,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         borderWidth: 1,
-        borderRadius: 6,
+        borderRadius: 12,
         paddingHorizontal: 12,
-        paddingVertical: 8,
+        paddingVertical: 10,
         minWidth: 180,
     },
     filterButtonText: {
         fontSize: 14,
+        fontWeight: '500',
     },
     resetButton: {
         flexDirection: 'row',
@@ -317,7 +322,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         borderRadius: 20,
         alignSelf: 'center',
-        marginTop: 4,
+        marginTop: 8,
     },
     resetButtonText: {
         marginRight: 8,
@@ -331,11 +336,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     modalContent: {
-        width: '80%',
+        width: '85%',
         maxHeight: '70%',
-        borderRadius: 12,
+        borderRadius: 16,
         borderWidth: 1,
-        padding: 16,
+        padding: 20,
+        elevation: 0,
+        shadowColor: 'transparent',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0,
+        shadowRadius: 0,
     },
     modalHeader: {
         flexDirection: 'row',
@@ -344,7 +354,7 @@ const styles = StyleSheet.create({
         paddingBottom: 12,
         marginBottom: 12,
         borderBottomWidth: 1,
-        borderBottomColor: '#e5e7eb',
+        borderBottomColor: '#f0f0f0',
     },
     modalTitle: {
         fontSize: 18,
@@ -355,9 +365,9 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 12,
-        paddingHorizontal: 16,
-        borderRadius: 6,
-        marginBottom: 4,
+        paddingHorizontal: 8,
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0',
     },
     modalItemText: {
         fontSize: 16,

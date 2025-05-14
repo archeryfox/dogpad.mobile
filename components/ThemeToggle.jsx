@@ -1,3 +1,4 @@
+// dogpad.mobile/components/ThemeToggle.jsx
 import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet, Switch } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,9 +18,9 @@ const ThemeToggle = ({ style }) => {
                 style={styles.switch}
                 value={isDarkMode}
                 onValueChange={toggleTheme}
-                trackColor={{ false: '#d1d5db', true: '#3b82f6' }}
+                trackColor={{ false: '#f0f0f0', true: '#3b82f6' }}
                 thumbColor={isDarkMode ? '#ffffff' : '#ffffff'}
-                ios_backgroundColor="#d1d5db"
+                ios_backgroundColor="#f0f0f0"
             />
             <Ionicons 
                 name="moon" 
@@ -35,10 +36,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 10,
+        borderRadius: 12,
     },
     switch: {
-        marginHorizontal: 8,
+        marginHorizontal: 12,
     },
 });
 
-export default ThemeToggle; 
+export default ThemeToggle;

@@ -1,3 +1,4 @@
+// dogpad.mobile/app/profile/_layout.jsx
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Stack } from 'expo-router';
